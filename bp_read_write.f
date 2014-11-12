@@ -25,17 +25,17 @@ c>>>>>>> other
       subroutine read_input(unit,filename)
       !to read in inputs from command: call read_input(5,'')
       !to read in inputs from a file:  call read_input(21,filename)
-      
+
       use mod_CONSTANTS
-      
+
       integer unit
       character(*) filename	!only for unit testing
-      
+
       !for unit testing
       if (unit.ne.5) then
          open(unit,file=trim(adjustl(filename)),status='OLD')
-      endif   
-      
+      endif
+
       read(unit,*) SessionID		!String label for Results Folder
       read(unit,"(i5)") Nexpts 		!number of experiments
       read(unit,"(i5)") Nnodes 		!number of nodes in the data set
@@ -48,52 +48,52 @@ c>>>>>>> other
       read(unit,"(i5)") Nobs  	 	!Number of Observed Proteins
       read(unit,"(i5)") Ndeci		!Number of Decimated Models to create
       read(unit,"(i5)") opt_maxSkip	!Decimation option to skip recalculating BP after every fixed value
-      
+
       !close file if unit testing
       if (unit.ne.5) then
          close(unit)
       endif
-      
+
       end subroutine read_input
       !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
+
        !VVVVVVVVVVVVVVVVVV   READ EXPERIMENTAL DATA VVVVVVVVVVVVVVVVVVV
        !reads in experimental data into XDATA variable
        subroutine read_exprdata(filename)
        use mod_CONSTANTS, only : XDATA,Nnodes,Nexpts
        character(*) filename
        integer node_idx,expr_idx
-       
+
        open(21,file=trim(adjustl(filename)),status='OLD')
        do node_idx=1,Nnodes
           read(21,*) (XDATA(node_idx,expr_idx),expr_idx=1,Nexpts)
        enddo
        close(21)
-       
+
        XDATA = XDATA + epsilon(1d0)
-       
+
        end subroutine read_exprdata
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
+
+
        !VVVVVVVVVVVVVVVVVV   READ PERTURBATION DATA VVVVVVVVVVVVVVVVVVV
        !reads in perturbation data into UDATA variable
        subroutine read_pertdata(filename)
        use mod_constants
        character(*) filename
        integer node_idx,expr_idx
-       
+
        open(21,file=trim(adjustl(filename)),status='OLD')
        do node_idx=1,Nnodes
           read(21,*) (UDATA(node_idx,expr_idx),expr_idx=1,Nexpts)
        enddo
        close(21)
-       
+
        end subroutine read_pertdata
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
-       
+
+
+
        !VVVVVVVVVVVVVVVVVV   READ PROTEIN NAMES VVVVVVVVVVVVVVVVVVV
        !reads and displays protein names
        !reads and displays whether protein is observed
@@ -106,9 +106,9 @@ c>>>>>>> other
        integer node_idx,obs_idx
        integer OmegaEq0(1)
        character*25 tempNodeName
-       
+
        OmegaEq0 = minloc(abs(Omega))
-              
+
 	   obs_idx=1
        open(21,file=trim(adjustl(filename)),status='OLD')
        do node_idx=1,Nnodes
@@ -118,8 +118,8 @@ c>>>>>>> other
              obs_idx = obs_idx+1
           endif
        enddo
-       close(21) 
-       
+       close(21)
+
        write(*,*) 'The Observed Proteins Are-----------------------'
        do obs_idx=1,Nobs
           write(*,*) ProtName(ObsArray(obs_idx))
@@ -135,13 +135,13 @@ c>>>>>>> other
           endif
        enddo
        write(*,*) '-------------------------------------------------'
-       
-       
-       
-       
+
+
+
+
        end subroutine read_ProtName
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
+
        !VVVVVVVVVVVVVVVVVV   WRITE GAMMA RATIOS VVVVVVVVVVVVVVVVVVV
        !calculates and writes gamma ratios (alpha/beta)
        subroutine write_gamma(filename)
@@ -149,7 +149,7 @@ c>>>>>>> other
        character(*) filename
        integer node_idx
        double precision Xdiabs(Nnodes,Nexpts)
-       
+
        Xdiabs = abs(XDATA)
        open(21,file=trim(adjustl(filename)))
        do node_idx =1,Nnodes
@@ -157,10 +157,10 @@ c>>>>>>> other
           write(21,'(F5.2)') Gamma(node_idx)
        enddo
        close(21)
-       
+
        end subroutine write_gamma
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
+
        !VVVVVVVVVVVVVVVVVV   READ IN AND CREATE PRIOR KNOWLEDGE VVVVVVVVVVV
        subroutine read_PK(filename)
        use mod_constants
@@ -170,29 +170,29 @@ c>>>>>>> other
        integer OmegaEq1(1)
        integer OmegaEq0(1)
        character(*) filename
-       
+
        allocate(PK(Nprior,3))
        write(*,*) 'The PRIOR information IS --------------------'
        write(*,*) 'number of Prior Knowledge Edges =',Nprior
        write(*,*) '*********************************'
-       
+
        open(21,file=trim(adjustl(filename)),status='old')
        do prior_idx=1,Nprior
           read(21,*) tempPrior
           reg  = tempPrior(1)
           targ = tempPrior(2)
           PKsign = tempPrior(3)
-          
+
           PK(prior_idx,1) = reg 	!the regulator
           PK(prior_idx,2) = targ  	!the target
           PK(prior_idx,3) = PKsign  !the sign
-          
+
           write(*,*) 'the target = ',ProtName(targ)
           write(*,*) 'the reg    = ',ProtName(reg)
           write(*,*) 'the sign   = ',PKsign
-          write(*,*) '*********************************' 
-          
-          ! (below) If we have Prior Knowledge on unobserved nodes, put them into the 
+          write(*,*) '*********************************'
+
+          ! (below) If we have Prior Knowledge on unobserved nodes, put them into the
           ! FullNetMarg variable, holding the final marginals.  This has
           ! no effect on BP results, but it may be useful for completeness.
           ! Used to assign Fixed Edges in Decimation allocation
@@ -203,19 +203,19 @@ c>>>>>>> other
                 if (reg_idx.eq.reg) then
                    FullNetMarg(reg_idx,OmegaEq0,targ) = 0d0
                    FullNetMarg(reg_idx,OmegaEq1,targ) = 1d0
-                endif  
+                endif
              enddo
           endif
           !End Handle unobserved targets with PK (obove)
-          
-          
+
+
        enddo
        write(*,*) '------------------------------------------------'
-       
+
        end subroutine read_PK
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
+
+
        !VVVVVVVVVVVVVVVV  WRITE ALL MARGINALS VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
        ! write to Marginals Subdirectory
        ! FileName = [index]_[Obs]_[NodeName]
@@ -230,36 +230,36 @@ c>>>>>>> other
        integer TargIdx
        integer Widx
        integer FileId
-       
+
        !Make 'Marginals' Directory if one does not exist
-       aSystemCall = 'mkdir -p '//trim(adjustl(Directory))//
-     :			'/Marginals'
+       aSystemCall = 'mkdir '//trim(adjustl(Directory))//
+     :			'\Marginals'
        call system(aSystemCall)
-       
+
        !writes the data contained in FullNetMarg
        do TargIdx=1,Nnodes
           write(TargIdx_string,'(i3)') TargIdx		!convert integer to string
           write(Obs_string,'(i1)') ProtObs(TargIdx)	!convert integer to string
-          
+
           !FileName = '[Directory]/Marginals/[index]_[Obs]_[NodeName].txt
-          MargFileName = trim(adjustl(Directory))//'/'//'Marginals/'
+          MargFileName = trim(adjustl(Directory))//'\'//'Marginals\'
      :		    //trim(adjustl(TargIdx_string))//
      : 			'_'//Obs_string//'_'//
      :			trim(adjustl(ProtName(TargIdx)))//'.txt'
-          
+
           open(21,file=MargFileName,action='write',status='replace')
           do RegIdx = 1,Nnodes
              do Widx =1,(Nwvals-1)
                 write(21,'(F6.2$)') FullNetMarg(RegIdx,Widx,TargIdx)
              enddo
              write(21,'(F6.2)') FullNetMarg(RegIdx,Widx,TargIdx)
-          enddo   
+          enddo
           close(21)
-       enddo   
+       enddo
        end subroutine write_all_marginals
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
+
+
        !VVVVVVVVVVVVVVVV  WRITE A MATRIX TO FILE VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
        subroutine write_matrix(Matrix,dim1,dim2,Directory,fname)
        integer dim1
@@ -271,10 +271,10 @@ c>>>>>>> other
        integer dim1_idx
        integer dim2_idx
        parameter(cutoff=0.25)
-       
-       Full_fname = trim(adjustl(Directory))//'/'
-     : 				//trim(adjustl(fname))//'.txt' 
-       
+
+       Full_fname = trim(adjustl(Directory))//'\'
+     : 				//trim(adjustl(fname))//'.txt'
+
        open(21,file=trim(adjustl(Full_fname))
      :  	,action='write',status='replace')
        do dim1_idx=1,dim1
@@ -282,13 +282,13 @@ c>>>>>>> other
              write(21,'(F6.2$)') Matrix(dim1_idx,dim2_idx)
           enddo
           write(21,'(F6.2)') Matrix(dim1_idx,dim2_idx)
-       enddo   
-       close(21) 
-       
+       enddo
+       close(21)
+
        end subroutine write_matrix
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
+
+
       !VVVVVVVVVVVVVVVVV  WRITE A MATRIX TO A SIF FILE VVVVVVVVVVVVVVVVVVVVVVVVV
       subroutine write_mat2sif(Matrix,dim1,dim2,Directory,fname)
       use mod_CONSTANTS
@@ -303,16 +303,16 @@ c>>>>>>> other
       character(len=*) Directory
       character(len=*) fname
       character(len=60) Full_fname
-      Full_fname = trim(adjustl(Directory))//'/'//
+      Full_fname = trim(adjustl(Directory))//'\'//
      :			trim(adjustl(fname))//'.sif'
       write(*,*) Full_fname
-             
-     
+
+
        open(21,file=trim(adjustl(Full_fname)),action
      :       ='write',status='replace')
        do dim1_idx =1,dim1
           do dim2_idx=1,dim2
-          
+
              if (Matrix(dim1_idx,dim2_idx).gt.cutoff) then 	!activates
                 LineContent = adjustl(trim(ProtName(dim2_idx)))//
      :           ' activates '//trim(adjustl(ProtName(dim1_idx)))
@@ -323,14 +323,14 @@ c>>>>>>> other
      			write(21,'(A)') adjustl(LineContent)
              endif
           enddo
-       enddo   
+       enddo
        close(21)
-       
-       
+
+
        end subroutine write_mat2sif
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
+
+
        !VVVVVVVVVVVVVVVVVVV  WRITE FACTORS TO SINGLE FILE VVVVVVVVVVVVVVVVVVVVVVVV
        subroutine writeFactorsToFile(dir,Factors,Nregs,Nvals,Npats,
      :	ProtNames,targ_idx)
@@ -344,18 +344,18 @@ c>>>>>>> other
        integer :: row_idx,col_idx,pat_idx	!for writing data to file
        character(len=100) :: factorLabel
        character(len=5) :: pat_label
-       
+
        !check if file exists: file = [SessionDirectory]/Verbose/factors.txt'
-       filepath = trim(adjustl(dir))//'/Verbose/factors.txt'
+       filepath = trim(adjustl(dir))//'\Verbose\factors.txt'
        inquire(file=trim(adjustl(filepath)),exist=file_exists)
        if(file_exists) then
           open(21,file=trim(adjustl(filepath)),STATUS='OLD',
      :      POSITION='APPEND')
        else
-          call system('mkdir -p '//trim(adjustl(dir))//'/Verbose')
+          call system('mkdir '//trim(adjustl(dir))//'\Verbose')
           open(21,file=trim(adjustl(filepath)),STATUS='NEW')
        endif
-       
+
        !write factors to file
        do row_idx=1,Nregs
           do pat_idx =1,Npats
@@ -363,7 +363,7 @@ c>>>>>>> other
           	factorLabel = trim(adjustl(ProtNames(targ_idx))) //
      :			'/' // trim(adjustl(ProtNames(row_idx))) // '/' //
      :			trim(adjustl(pat_label))
-	 		
+
           	 write(21,'(A$)') trim(adjustl(factorLabel)) // ' '
              do col_idx=1,Nvals
                 if (col_idx.lt.Nvals) then
@@ -379,12 +379,12 @@ c>>>>>>> other
 
 
        close(21)
-        
-       
+
+
        end subroutine
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
+
+
        !VVVVVVVVVVVVVVVVV  READ A DOUBLE PRECISION MATRIX FROM FILE VVVVVVVVVVVVVV
        subroutine read_dpmatrix_fromfile(Nrows,Ncols,theMatrix,filename)
        !assumes format = F6.2
@@ -392,8 +392,8 @@ c>>>>>>> other
        integer :: ridx,cidx
        double precision theMatrix(Nrows,Ncols)
        character(*) filename
-       
-       
+
+
        open(21,file=trim(adjustl(filename)),STATUS='OLD')
        do ridx=1,Nrows
           do cidx=1,(Ncols-1)
@@ -401,11 +401,11 @@ c>>>>>>> other
           enddo
           read(21,'(F6.2)') theMatrix(ridx,Ncols)
        enddo
-       
+
        end subroutine read_dpmatrix_fromfile
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       
-       
+
+
        !VVVVVVVVVVVVVVVVV  READ A REAL PRECISION MATRIX FROM FILE VVVVVVVVVVVVVV
        subroutine read_realmatrix_fromfile(Nrows,Ncols,
      :  	theMatrix,filename)
@@ -414,8 +414,8 @@ c>>>>>>> other
        integer :: ridx,cidx
        real theMatrix(Nrows,Ncols)
        character(*) filename
-       
-       
+
+
        open(21,file=trim(adjustl(filename)),STATUS='OLD')
        do ridx=1,Nrows
           do cidx=1,(Ncols-1)
@@ -423,5 +423,5 @@ c>>>>>>> other
           enddo
           read(21,'(F6.2)') theMatrix(ridx,Ncols)
        enddo
-       
+
        end subroutine read_realmatrix_fromfile
