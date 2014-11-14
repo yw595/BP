@@ -185,6 +185,31 @@ c>>>>>>> other
        end subroutine ind2sub
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+       !VVVVVVVVVVVVVVVVVVVV  CONVERT INDICES TO SUBSCRIPTS VVVVVVVVVVVVVVVVVVVVVVVVVVV
+       subroutine ind2subprev(Rows,Cols,Indices,Subs,NumInd)
+       integer Rows
+       integer Cols
+       integer NumInd
+       integer Indices(NumInd)
+       integer Subs(NumInd,2)	!By definition 2 subscripts per index (for a 2d matrix)
+       integer j
+       integer index
+
+
+       do j=1,NumInd
+          index = Indices(j)
+          Subs(j,1) = mod(index,Cols)					!the row index
+          Subs(j,2) = 1+ (index-(mod(index,Cols)))/Rows 	!column index
+          if (Subs(j,1).eq.0) then
+             Subs(j,1) = Rows	!mod=0 corresponds to last element
+             Subs(j,2) = (index-(mod(index,Cols)))/Rows	!special case
+          endif
+
+       enddo
+
+       end subroutine ind2subprev
+       !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 
 

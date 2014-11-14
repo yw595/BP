@@ -38,9 +38,8 @@ gdobjects_module = GradientDescent\modarguments.o GradientDescent\modexp.o Gradi
 
 gdobjects_all = $(gdobjects_module) GradientDescent\dlsode.o GradientDescent\exp.o GradientDescent\fit_static_2.o GradientDescent\main.o GradientDescent\model.o GradientDescent\prep_cg.o GradientDescent\prep_data.o GradientDescent\random.o GradientDescent\sim.o
 
-
 # Declare the object files
-objects = bp_mod_CONSTANTS.o bp_mod_BP.o bp_mod_DECIMATION.o bp_allocation.o bp_BeliefPropagation.o bp_calculations.o bp_Decimation.o bp_read_write.o bp_main.o
+objects = bp_mod_CONSTANTS.o bp_mod_BP.o bp_mod_DECIMATION.o bp_allocation.o bp_BeliefPropagation.o bp_calculations.o bp_Decimation.o bp_read_write.o bp_main.o testInd2Sub.o
 
 # Make----------------------------------------------------------------------------------
 all: $(PROGRAMS)	#make the executables listed in the 'PROGRAMS' variable
@@ -101,7 +100,7 @@ doBP_FULL: $(objects)	#command of how to make 'doBP_FULL' (listed in 'PROGRAMS')
 
 	
 clean_dev: 
-	mv bp_allocation.o bp_BeliefPropagation.o bp_calculations.o bp_Decimation.o bp_read_write.o *.mod bp_mod_BP.o bp_mod_CONSTANTS.o bp_mod_DECIMATION.o UnitTesting\ ; rm bp_main.o 
+	mv bp_allocation.o bp_BeliefPropagation.o bp_calculations.o bp_Decimation.o bp_read_write.o *.mod bp_mod_BP.o bp_mod_CONSTANTS.o bp_mod_DECIMATION.o testInd2Sub.o UnitTesting\ ; rm bp_main.o 
 
 clean_usr:
 	rm *.o ; rm *.mod

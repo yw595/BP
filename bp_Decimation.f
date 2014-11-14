@@ -22,6 +22,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       use mod_BP
       use mod_DECIMATION
       integer j
+      integer deciOption
 
       !(1) -----------  SETUP ------------------------------------------------------------------
       !Allocate and Prepare variables and random numbers
@@ -49,7 +50,6 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       enddo
       !-----------------------------------------------------------------------------------------
 
-      integer deciOption
       deciOption = 1
 
       !(2) ============  LOOP THROUGH UNFIXED ELEMENTS =============

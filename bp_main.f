@@ -28,7 +28,18 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       use mod_DECIMATION		!module containing variable declarations for Decimation calculation variables
 
       integer defaultNexpcg
-      call read_input(7,'input.txt')				!read the information from input.txt with unit=5 "from keyboard"
+
+      doTestInd2Sub=.TRUE.
+
+      if(doTestInd2Sub) then
+
+      call allocate_constants()
+      call testInd2Sub()
+      call deallocate_constants()
+
+      else
+
+      call read_input(21,'input.txt')				!read the information from input.txt with unit=5 "from keyboard"
       call allocate_constants()         !Allocate Memory Space for MultiDimensional Constants
       									!Assigns values to Omega
       									!creates the default Marginal P(wij=0) = 1
@@ -136,8 +147,6 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       enddo
       !---------------------------------------------------------------------------------------------
 
-
-
-
+      endif
 
       end ! end of main
