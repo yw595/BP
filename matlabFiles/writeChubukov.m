@@ -12,7 +12,6 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     fluxNames=fluxNames(fluxNamesIdxs);
 
     %get fluxData as all fluxes, fluxDataNorm as first condition
-    fluxDataNorm=[];
     fluxData=[];
     for j=4:11
         for i=5:50
@@ -23,89 +22,27 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     fluxData(idxsToSkip2,:)=[];
     
     %get standard deviations of 8 conditions besides glucose
-    fluxStdevs=[];
+    fluxStds=[];
     for j=13:20
         for i=5:50
-            fluxStdevs(i-4,j-12)=totalData{i,j};
+            fluxStds(i-4,j-12)=totalData{i,j};
         end
     end
-    fluxStdevs(:,idxsToSkip1)=[];
-    fluxStdevs(idxsToSkip2,:)=[];
+    fluxStds(:,idxsToSkip1)=[];
+    fluxStds(idxsToSkip2,:)=[];
 
-    %use standard deviations to replicate fluxData 5 times with Gaussian noise
-    fluxDataTemp=[];
+    fluxData = prepareData(fluxData,fluxStds,duplicate,localMin,globalMin,useFluxLog);
+    writeMatrix(fluxData,['fluxData' suffix '.txt']);
+
+    fluxPert = [];
     for i=1:size(fluxData,1)
         for j=1:size(fluxData,2)
-            for k=1:5
-                fluxDataTemp(i,(j-1)*5+k)=fluxData(i,j)+fluxStdevs(i,j)*randn(1,1);
-            end
-        end
-    end
-    if(duplicate)
-        fluxData=fluxDataTemp;
-    end
-
-    %calculate minimum absolute flux, subtract from all fluxes so all fluxes
-    %are positive, thus fluxDataNorm values will be somewhere in that positive
-    %range
-    if(localMin)
-        for i=1:size(fluxData,1)
-            minFluxDataVal=min(fluxData(i,:));
-            fluxData(i,:)=fluxData(i,:)-minFluxDataVal;
-        end
-    end
-    if(globalMin)
-        minFluxDataVal=min(min(fluxData));
-        fluxData=fluxData-minFluxDataVal;
-    end
-    epsFlux=min(min(abs(fluxData(fluxData~=0))));
-    if(useFluxLog)
-        fluxDataNorm=fluxData(:,1);
-        if(duplicate)
-            fluxData=fluxData(:,6:end);
-        else
-            fluxData=fluxData(:,2:end);
-        end
-        for i=1:size(fluxData,2)
-            for j=1:size(fluxData,1)
-                if(fluxData(j,i)==0 || fluxDataNorm(j)==0)
-                    fluxData(j,i)=log((fluxData(j,i)+epsFlux)/(fluxDataNorm(j)+epsFlux));
-                else
-                    fluxData(j,i)=log(fluxData(j,i)/fluxDataNorm(j));
-                end
-            end
-        end
-    end
-
-    %write out log-fold values, setting limits at abs(99) so number of digits
-    %to left of decimal <=2
-    fluxDataFID=fopen(['fluxData' suffix '.txt'],'w');
-    for i=1:size(fluxData,1)
-        for j=1:size(fluxData,2)
-            if(j==size(fluxData,2))
-                fprintf(fluxDataFID,'%2.2f\n',fluxData(i,j));
-            else
-                fprintf(fluxDataFID,'%2.2f ',fluxData(i,j));
-            end
-        end
-    end
-    fclose(fluxDataFID);
-
-    fluxPertFID=fopen(['fluxPert' suffix '.txt'],'w');
-    for i=1:size(fluxData,1)
-        for j=1:size(fluxData,2)
-            writeValue=0;
             if(perturbations && i<=8 && fluxData(i,j)~=0)
-                writeValue=fluxData(i,j)/(1.1*max(fluxData(i,:)));
-            end
-            if(j==size(fluxData,2))
-                fprintf(fluxPertFID,'%2.2f\n',writeValue);
-            else
-                fprintf(fluxPertFID,'%2.2f ',writeValue);
+                fluxPert(i,j)=fluxData(i,j)/(1.1*max(fluxData(i,:)));
             end
         end
     end
-    fclose(fluxPertFID);
+    writeMatrix(fluxPert,['fluxPert' suffix '.txt']);
 
     %write out fluxNames without spaces so BP can read them
     fluxNameFID=fopen(['fluxName' suffix '.txt'],'w');
@@ -114,12 +51,7 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     end
     fclose(fluxNameFID);
 
-    %parse equations written out in rxnEqs.txt
     SMatrix=formSMatrix(metsNames,fluxNames);
-
-    %form rxnInfluenceMatrix by dot-product of S-matrix columns for reaction,
-    %filter out elements at CO2 rows, and remove Fba and Tpi interactions since
-    %are ambiguous
     rxnInfluenceMatrix=formInfluenceMatrix(fluxNames,SMatrix,metsNames);
     
     corrMatrix=zeros(length(fluxNames),length(fluxNames));
@@ -159,25 +91,14 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     end
     fclose(fluxSoftPriorFID);
     
-    fluxHardPriorFID=fopen(['fluxHardPrior' suffix '.txt'],'w');
-    for i=1:length(fluxNames)
-        for j=1:length(fluxNames)
-            writeValue=0;
-            if(influenceHardPrior)
-                writeValue=abs(rxnInfluenceMatrix(i,j));
-            elseif(correlationHardPrior)
-                writeValue=abs(corrMatrix(i,j))>=corrThresh;
-            else
-                writeValue=1;
-            end
-            if(j==length(fluxNames))
-                fprintf(fluxHardPriorFID,'%d\n',writeValue);
-            else
-                fprintf(fluxHardPriorFID,'%d ',writeValue);
-            end
-        end
+    if(influenceHardPrior)
+        fluxHardPrior=abs(rxnInfluenceMatrix);
+    elseif(correlationHardPrior)
+        fluxHardPrior=abs(corrMatrix)>=corrThresh;
+    else
+        fluxHardPrior=ones(length(fluxNames),length(fluxNames));
     end
-    fclose(fluxHardPriorFID);
+    writeMatrix(fluxHardPrior,['fluxHardPrior' suffix '.txt'],1);
     
     [junk1 junk2 totalData]=xlsread('../Chubukov/inline-supplementary-material-2.xlsx',3);
     
@@ -193,58 +114,16 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     end
     
     %get standard deviations of 8 conditions besides glucose
-    metsStdevs=[];
+    metsStds=[];
     for j=11:18
         for i=5:38
-            metsStdevs(i-4,j-10)=totalData{i,j};
+            metsStds(i-4,j-10)=totalData{i,j};
         end
     end
 
-    %use standard deviations to replicate fluxData 5 times with Gaussian noise
-    metsDataTemp=[];
-    for i=1:size(metsData,1)
-        for j=1:size(metsData,2)
-            for k=1:5
-                metsDataTemp(i,(j-1)*5+k)=metsData(i,j)+metsStdevs(i,j)*randn(1,1);
-            end
-        end
-    end
-    if(duplicate)
-        metsData=metsDataTemp;
-    end
-    
-    epsMets=min(min(abs(metsData(metsData~=0))));
-    
-    if(useMetsLog)
-        metsDataNorm=metsData(:,1);
-        if(duplicate)
-            metsData=metsData(:,6:end);
-        else
-            metsData=metsData(:,2:end);
-        end
-        for i=1:size(metsData,2)
-            for j=1:size(metsData,1)
-                if(metsData(j,i)==0 || metsDataNorm(j)==0)
-                    metsData(j,i)=log((metsData(j,i)+epsFlux)./(metsDataNorm(j)+epsFlux));
-                else
-                    metsData(j,i)=log(metsData(j,i)/metsDataNorm(j));
-                end
-            end
-        end
-    end
-    
-    metsDataFID=fopen(['metsData' suffix '.txt'],'w');
-    for i=1:size(metsData,1)
-        for j=1:size(metsData,2)
-            if(j==size(metsData,2))
-                fprintf(metsDataFID,'%2.2f\n',metsData(i,j));
-            else
-                fprintf(metsDataFID,'%2.2f ',metsData(i,j));
-            end
-        end
-    end
-    fclose(metsDataFID);
-    
+    metsData = prepareData(metsData,metsStds,duplicate,0,0,useMetsLog);    
+    writeMatrix(metsData,['metsData' suffix '.txt']);
+
     metsSoftPriorFID=fopen(['metsSoftPrior' suffix '.txt'],'w');
     for i=1:size(SMatrix,1)
         for j=1:size(SMatrix,2)
@@ -256,21 +135,12 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
         end
     end 
     fclose(metsSoftPriorFID);
-    metsHardPriorFID=fopen(['metsHardPrior' suffix '.txt'],'w');
-    for i=1:size(SMatrix,1)
-        for j=1:size(SMatrix,2)
-            writeValue=1;
-            if(stoichioSoftPrior)
-                writeValue=SMatrix(i,j)~=0;
-            end
-            if(j==size(SMatrix,2))
-                fprintf(metsHardPriorFID,'%d\n',writeValue);
-            else
-                fprintf(metsHardPriorFID,'%d ',writeValue);
-            end
-        end
-    end 
-    fclose(metsHardPriorFID);
+
+    metsHardPrior=ones(size(SMatrix,1),size(SMatrix,2));
+    if(stoichioSoftPrior)
+        metsHardPrior=SMatrix(i,j)~=0;
+    end
+    writeMatrix(metsHardPrior,['metsHardPrior' suffix '.txt'],1);
     
     metsNameFID=fopen(['metsName' suffix '.txt'],'w');
     for i=1:size(metsData,1)

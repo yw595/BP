@@ -5,11 +5,13 @@ function SMatrix=formSMatrix(metsNames,rxnNames)
     line=fgetl(rxnEqsFID);
     while(line~=-1)
         rxnName=line(1:regexp(line,':')-1);
+        
         %get reactants and products parts of line
         reactantsLine=line(regexp(line,':')+1:regexp(line,'-')-1);
         productsLine=line(regexp(line,'>'):end);
         reactants=[];
         products=[];
+        
         %if reactant and product parts are not empty, split them on +
         if(length(reactantsLine)~=1)
             reactantsLine=reactantsLine(2:end-1);
@@ -19,6 +21,7 @@ function SMatrix=formSMatrix(metsNames,rxnNames)
             productsLine=productsLine(3:end);
             products=strsplit(productsLine,' + ');
         end
+        
         %if the reaction Name matches the storeNames with spaces, put one in
         %corresponding position in S matrix
         for i=1:length(products)
