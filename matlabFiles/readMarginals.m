@@ -7,19 +7,7 @@ function readMarginals(suffix,modelFile,idxsToSkip2)
     interactionsMatrix=zeros(length(fluxNames),length(metsNames),Nwvals);
     for i=1:length(fluxNames)
         target=fluxNames{i};
-        targetFID=fopen([suffix '\Marginals\' num2str(i) '_1_' target '.txt']);
-        line=fgetl(targetFID);
-        lineNum=1;
-        while(line~=-1)
-            words=strsplit(line,'  ');
-            words=words(2:end);
-            for j=1:length(words)
-                interactionsMatrix(i,lineNum,j)=str2num(words{j});
-            end
-            line=fgetl(targetFID);
-            lineNum=lineNum+1;
-        end
-        fclose(targetFID);
+        interactionsMatrix(i,:,:)=readMatrix([suffix '\Marginals\' num2str(i) '_1_' target '.txt'],'  ');
     end
     
     modelFID=fopen(modelFile);

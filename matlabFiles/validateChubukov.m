@@ -7,12 +7,8 @@ function []=validateChubukov(filterUnclear,dataFile,isMets)
         rxnNames=rxnNames(9:end-12);
     end
     
-    %parse equations written out in NodeEqs.txt
     SMatrix=formSMatrix(metsNames);
 
-    %form NodeInfluenceMatrix by dot-product of S-matrix columns for reaction,
-    %filter out elements at CO2 rows, and remove Fba and Tpi interactions since
-    %are ambiguous
     rxnInfluenceMatrix=formInfluenceMatrix(fluxNames,SMatrix,metsNames);
     
     metsAndRxnsInfluenceMatrix=zeros(length(metsNames)+length(fluxNames),length(metsNames)+length(fluxNames));
@@ -72,43 +68,8 @@ function []=validateChubukov(filterUnclear,dataFile,isMets)
             end
         end
     
-        %iterate over NodeInfluenceMatrix and W, calculate accuracy statistics
-        possibilities=cell(3,3);
-        possibilities{1,1}='True Positive';
-        possibilities{1,2}='False Negative';
-        possibilities{1,3}='False Positive';
-        possibilities{2,1}='False Positive';
-        possibilities{2,2}='True Negative';
-        possibilities{2,3}='False Positive';
-        possibilities{3,1}='False Positive';
-        possibilities{3,2}='False Negative';
-        possibilities{3,3}='True Positive';
-        countsMatrix=zeros(3,3);
-        wrongPredictionsNodes={};
-        wrongPredictionsWeights=[];
-        wrongPredictionsCorrect=[];
-        for i=1:length(nodeNames)
-            for j=1:length(nodeNames)
-                ijthPossibility=possibilities{storeNodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2};
-                countsMatrix(storeNodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2)= ...
-                countsMatrix(storeNodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2)+1;
-                %if false positive or negative, use extended NodeInfluence instead,
-                %adjusting countsMatrix. If still false, write out Nodes, weight of
-                %predicted interaction, and correct interaction
-                if(strcmp(ijthPossibility,'False Positive') || strcmp(ijthPossibility,'False Negative'))
-                    ijthPossibility=possibilities{NodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2};
-                    countsMatrix(storeNodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2)= ...
-                    countsMatrix(storeNodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2)-1;
-                    countsMatrix(nodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2)= ...
-                    countsMatrix(nodeInfluenceMatrix(i,j)+2,WNodeInfluenceMatrix(i,j)+2)+1;
-                    if(strcmp(ijthPossibility,'False Positive') || strcmp(ijthPossibility,'False Negative'))
-                        wrongPredictionsNodes{end+1}=[metsNames{i} ' ' metsNames{j}];
-                        wrongPredictionsWeights(end+1)=WNodeInfluenceMatrixContinuous(i,j);
-                        wrongPredictionsCorrect(end+1)=nodeInfluenceMatrix(i,j);
-                    end
-                end
-            end
-        end
+        [countsMatrix wrongPredictionsNodes wrongPredictionsWeights wrongPredictionsCorrect] = ...
+            computeStats(WNodeInfluenceMatrix,storeNodeInfluenceMatrix,nodeInfluenceMatrix);
     
         %display wrong Predictions
         for i=1:length(wrongPredictionsNodes)

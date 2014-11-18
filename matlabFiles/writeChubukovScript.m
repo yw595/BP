@@ -1,10 +1,4 @@
-%Linear Log localMin globalMin Dup deciOption
-%influenceHard correlationHard influenceSoft correlationSoft stoichioSoft
-%metsHard fluxHard metsSoft fluxSoft
 useMets=1;
-%runNames={'NoPrior2','StoichioPrior2','NoPrior1','StoichioPrior1'};
-%optionsArrays={[0 1 0 1 0 0 0 0 1 1 2 0 0 1 10],[0 1 0 1 0 0 0 0 1 1 2 1 0 1 10],...
-    %[0 1 0 1 0 0 0 0 1 1 1 0 0 1 10],[0 1 0 1 0 0 0 0 1 1 1 1 0 1 10]};
 runNames={'StoichioPrior2again'};
 optionsArrays={[0 1 0 1 0 0 0 0 1 1 2 1 0 1 10]};
 
@@ -33,26 +27,7 @@ for i=1:length(runNames)
         correlationHardPrior,influenceSoftPrior,correlationSoftPrior,useFluxLog,useMetsLog,deciOption,...
         stoichioSoftPrior,useLinearAnsatz,beta,lambda);
     
-    copyfile(['fluxName' suffix '.txt'],'name.txt');
-    copyfile(['fluxPert' suffix '.txt'],'pert.txt');
-    copyfile(['fluxData' suffix '.txt'],'data.txt');
-    copyfile(['input' suffix '.txt'],'input.txt');
-    copyfile(['metsData' suffix '.txt'],'metsData.txt');
-    copyfile(['metsName' suffix '.txt'],'metsName.txt');
-    
-    if(influenceHardPrior || correlationHardPrior || influenceSoftPrior || correlationSoftPrior)
-        copyfile(['fluxHardPrior' suffix '.txt'],'hardPrior.txt');
-        copyfile(['fluxSoftPrior' suffix '.txt'],'softPrior.txt');
-    elseif(stoichioSoftPrior)
-        copyfile(['metsHardPrior' suffix '.txt'],'hardPrior.txt');
-        copyfile(['metsSoftPrior' suffix '.txt'],'softPrior.txt');
-    elseif(useMets)
-        copyfile(['metsHardPrior' suffix '.txt'],'hardPrior.txt');
-        copyfile(['metsSoftPrior' suffix '.txt'],'softPrior.txt');
-    else
-        copyfile(['fluxHardPrior' suffix '.txt'],'hardPrior.txt');
-        copyfile(['fluxSoftPrior' suffix '.txt'],'softPrior.txt');
-    end
+    renameInputFiles(suffix,useMets);
     
     system('bin\Debug\BeliefPropagationMets.exe');
     

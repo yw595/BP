@@ -98,13 +98,6 @@ function [signedRecall signedPrecision signedCounts unsignedRecall unsignedPreci
         end
     end
     
-    %fluxMetsCorrsTemp=[];
-    %for i=1:length(fluxMetsCorrs)
-        %if(abs(fluxMetsCorrs(i,1))>0.8)
-            %fluxCorrsMetsTemp(end+1,:)=fluxMetsCorrs(i,:);
-        %end
-    %end
-    %fluxMetsCorrs=fluxMetsCorrsTemp;
     [junk sortIdxs]=sort(abs(fluxMetsCorrs(:,1)));
     fluxMetsCorrs=fluxMetsCorrs(sortIdxs(end-99:end),:);
     fluxMetsCorrMatrix=zeros(size(fluxMetsCorrMatrix,1),size(fluxMetsCorrMatrix,2));

@@ -16,6 +16,7 @@ function writeMatrix(matrix,outputFile,writeInteger,writeSif,writeEdges,sigThres
             end
         end
     elseif(exist('writeEdges','var') && writeEdges)
+        fprintf(outputFID,'EdgeProbability\n');
         for i=1:size(matrix,1)
             for j=1:size(matrix,2)
                 if(abs(matrix(i,j))>=sigThresh)

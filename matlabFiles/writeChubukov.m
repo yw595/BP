@@ -34,17 +34,10 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     fluxData = prepareData(fluxData,fluxStds,duplicate,localMin,globalMin,useFluxLog);
     writeMatrix(fluxData,['fluxData' suffix '.txt']);
 
-    fluxPert = [];
-    for i=1:size(fluxData,1)
-        for j=1:size(fluxData,2)
-            if(perturbations && i<=8 && fluxData(i,j)~=0)
-                fluxPert(i,j)=fluxData(i,j)/(1.1*max(fluxData(i,:)));
-            end
-        end
-    end
+    fluxPert = zeros(size(fluxData,1),size(fluxData,2));
+    fluxPert(1:8,:)=fluxData(1:8,:)./(1.1*max(fluxData(1:8,:),2)*ones(8,size(fluxData,2)));
     writeMatrix(fluxPert,['fluxPert' suffix '.txt']);
 
-    %write out fluxNames without spaces so BP can read them
     fluxNameFID=fopen(['fluxName' suffix '.txt'],'w');
     for i=1:size(fluxData,1)
         fprintf(fluxNameFID,'1 %s\n',fluxNames{i});
@@ -58,14 +51,8 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     for i=1:length(fluxNames)
         for j=1:length(fluxNames)
             if(i~=j)
-                row1=[];
-                row2=[];
-                for k=1:size(fluxData,2)
-                    if(abs(fluxData(i,k))>0 && abs(fluxData(j,k))>0)
-                        row1(end+1)=fluxData(i,k);
-                        row2(end+1)=fluxData(j,k);
-                    end
-                end
+                row1=fluxData(i, fluxData(i,:) & fluxData(j,:) );
+                row2=fluxData(j, fluxData(i,:) & fluxData(j,:) );
                 if(length(row1)>3)
                     tempCorr=corr([row1' row2'],'type','Spearman');
                     corrMatrix(i,j)=tempCorr(1,2);
@@ -74,22 +61,11 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
         end
     end
 
-    %write out all entries in rxnInfluenceMatrix as prior
-    fluxSoftPriorFID=fopen(['fluxSoftPrior' suffix '.txt'],'w');
-    for i=1:length(fluxNames)
-        for j=1:length(fluxNames)
-            if(influenceSoftPrior)
-                if(rxnInfluenceMatrix(i,j)~=0)
-                    fprintf(fluxSoftPriorFID,'%d %d %d\n',i,j,rxnInfluenceMatrix(i,j));
-                end
-            elseif(correlationSoftPrior)
-                if(abs(corrMatrix(i,j))>=corrThresh)
-                    fprintf(fluxSoftPriorFID,'%d %d %d\n',i,j,sign(corrMatrix(i,j)));
-                end
-            end
-        end
+    if(influenceSoftPrior)
+        writeMatrix(reshapeMatrix(rxnInfluenceMatrix),['fluxSoftPrior' suffix '.txt']);
+    elseif(correlationSoftPrior)
+        writeMatrix(reshapeMatrix(sign(corrMatrix (abs(corrMatrix)>=corrThresh) )),['fluxSoftPrior' suffix '.txt']);
     end
-    fclose(fluxSoftPriorFID);
     
     if(influenceHardPrior)
         fluxHardPrior=abs(rxnInfluenceMatrix);
@@ -123,18 +99,10 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
 
     metsData = prepareData(metsData,metsStds,duplicate,0,0,useMetsLog);    
     writeMatrix(metsData,['metsData' suffix '.txt']);
-
-    metsSoftPriorFID=fopen(['metsSoftPrior' suffix '.txt'],'w');
-    for i=1:size(SMatrix,1)
-        for j=1:size(SMatrix,2)
-            if(stoichioSoftPrior)
-                if(SMatrix(i,j)~=0)
-                    fprintf(metsSoftPriorFID,'%d %d %d\n',i,j,sign(SMatrix(i,j)));
-                end
-            end
-        end
-    end 
-    fclose(metsSoftPriorFID);
+    
+    if(stoichioSoftPrior)
+        writeMatrix(reshapeMatrix(sign(SMatrix)),['metsSoftPrior' suffix '.txt']);
+    end
 
     metsHardPrior=ones(size(SMatrix,1),size(SMatrix,2));
     if(stoichioSoftPrior)
