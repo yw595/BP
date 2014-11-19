@@ -17,7 +17,7 @@ function averageModels(suffix,idxsToSkip1,idxsToSkip2)
     end
     WAverage=WAverage/numFilesRead;
     
-    writeMatrix(WAverage,[suffix '\ModelAverage.txt'],0)
-    writeMatrix(WAverage,[suffix '\ModelAverage.sif'],0,1,0,.25,metsNames,fluxNames)
-    writeMatrix(WAverage,[suffix '\ModelAverageedges.txt'],0,0,1,.25,metsNames,fluxNames)
+    writeMatrix(WAverage,[suffix '\ModelAverage.txt'],0);
+    writeMatrix(WAverage,[suffix '\ModelAverage.sif'],0,1,0,.25,metsNames,fluxNames);
+    writeMatrix(WAverage,[suffix '\ModelAverageedges.txt'],0,0,1,.25,metsNames,fluxNames);
 end
