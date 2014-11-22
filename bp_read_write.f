@@ -36,6 +36,8 @@ c>>>>>>> other
          open(unit,file=trim(adjustl(filename)),status='OLD')
       endif
 
+      read(unit,"(I5)") doTestInd2Sub
+      read(unit,"(A50)") inputDir
       read(unit,*) SessionID		!String label for Results Folder
       read(unit,"(i5)") Nexpts 		!number of experiments
       read(unit,"(i5)") Nnodes 		!number of nodes in the data set

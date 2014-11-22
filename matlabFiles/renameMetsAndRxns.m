@@ -28,7 +28,7 @@ function [metsNames rxnNames]=renameMetsAndRxns(includeExtraMets)
     end
     
     rxnNames={};
-    rxnEqsFID=fopen('../Chubukov/rxnEqs.txt');
+    rxnEqsFID=fopen('../ChubukovData/rxnEqs.txt');
     line=fgetl(rxnEqsFID);
     while(line~=-1)
         rxnNames{end+1}=line(1:regexp(line,':')-1);

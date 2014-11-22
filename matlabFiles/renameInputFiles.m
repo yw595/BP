@@ -1,19 +1,16 @@
 function renameInputFiles(suffix,useMets)
 
-if(~exist('suffix','var'))
-    suffix='Chubukov';
-end
-copyfile(['fluxName' suffix '.txt'],'name.txt');
-copyfile(['fluxPert' suffix '.txt'],'pert.txt');
+copyfile(['../' suffix '/fluxName.txt'],['../' suffix '/name.txt']);
+copyfile(['../' suffix '/fluxPert.txt'],['../' suffix '/pert.txt']);
 if(~exist('useMets','var') && useMets)
-    copyfile(['metsHardPrior' suffix '.txt'],'hardPrior.txt');
-    copyfile(['metsSoftPrior' suffix '.txt'],'softPrior.txt');
+    copyfile(['../' suffix '/metsHardPrior.txt'],['../' suffix '/hardPrior.txt']);
+    copyfile(['../' suffix '/metsSoftPrior.txt'],['../' suffix '/prior.txt']);
+    copyfile(['../' suffix '/metsData.txt'],['../' suffix '/data.txt']);
 else
-    copyfile(['fluxHardPrior' suffix '.txt'],'hardPrior.txt');
-    copyfile(['fluxSoftPrior' suffix '.txt'],'softPrior.txt');
+    copyfile(['../' suffix '/fluxHardPrior.txt'],['../' suffix '/hardPrior.txt']);
+    copyfile(['../' suffix '/fluxSoftPrior.txt'],['../' suffix '/prior.txt']);
+    copyfile(['../' suffix '/fluxData.txt'],['../' suffix '/data.txt']);
 end
-copyfile(['fluxData' suffix '.txt'],'data.txt');
-copyfile(['input' suffix '.txt'],'input.txt');
-copyfile(['metsData' suffix '.txt'],'metsData.txt');
-copyfile(['S' suffix '.txt'],'S.txt');
+copyfile(['../' suffix '/input.txt'],'../input.txt');
+
 end

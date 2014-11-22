@@ -1,6 +1,6 @@
-useMets=1;
-runNames={'StoichioPrior2again'};
-optionsArrays={[0 1 0 1 0 0 0 0 1 1 2 1 0 1 10]};
+useMets=0;
+runNames={'ChubukovTest'};
+optionsArrays={[1 0 0 1 0 0 0 1 1 1 2 0 0 1 10]};
 
 if(0)
 runNames={};
@@ -28,8 +28,12 @@ for i=1:length(runNames)
         stoichioSoftPrior,useLinearAnsatz,beta,lambda);
     
     renameInputFiles(suffix,useMets);
-    
-    system('bin\Debug\BeliefPropagationMets.exe');
+    eval('cd ..');
+    system('make');
+    disp(['.' sprintf('\\doBP_FULL\n0\n%s\n', suffix)])
+    system(['.' sprintf('\\doBP_FULL\n')]);
+    eval('cd matlabFiles');
+    break;
     
     if(0)
     [signedRecall signedPrecision signedCounts unsignedRecall unsignedPrecision unsignedCounts] ...

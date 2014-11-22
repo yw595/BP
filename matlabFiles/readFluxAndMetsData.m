@@ -1,5 +1,5 @@
 function [fluxData fluxStds metsData metsStds] = readFluxAndMetsData(idxsToSkip1,idxsToSkip2)
-    [junk1 junk2 totalData]=xlsread('../Chubukov/inline-supplementary-material-22.xlsx',4);
+    [junk1 junk2 totalData]=xlsread('../ChubukovData/inline-supplementary-material-22.xlsx',4);
     fluxData=[];
     for j=4:11
         for i=5:50
@@ -19,7 +19,7 @@ function [fluxData fluxStds metsData metsStds] = readFluxAndMetsData(idxsToSkip1
     fluxStds(:,idxsToSkip1)=[];
     fluxStds(idxsToSkip2,:)=[];
     
-    [junk1 junk2 totalData]=xlsread('../Chubukov/inline-supplementary-material-2.xlsx',3);
+    [junk1 junk2 totalData]=xlsread('../ChubukovData/inline-supplementary-material-2.xlsx',3);
     
     metsData=[];
     for j=2:9

@@ -75,6 +75,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
        integer, dimension(:), allocatable :: testInds
        integer, dimension(:,:), allocatable :: testSubs
-       logical doTestInd2Sub
+       integer doTestInd2Sub
+       character(len=50) inputDir
 
        end module mod_CONSTANTS

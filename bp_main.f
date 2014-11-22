@@ -29,9 +29,9 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       integer defaultNexpcg
 
-      doTestInd2Sub=.FALSE.
+      call read_input(21,'input.txt')				!read the information from input.txt with unit=5 "from keyboard"
 
-      if(doTestInd2Sub) then
+      if(doTestInd2Sub .EQ. 1) then
 
       call allocate_constants()
       call testInd2Sub()
@@ -40,16 +40,15 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       else
 
       !Yiping: TestData2 just contains the same files as in the TestData included with the paper
-      call read_input(21,'TestData2\input.txt')				!read the information from input.txt with unit=5 "from keyboard"
       call allocate_constants()         !Allocate Memory Space for MultiDimensional Constants
       									!Assigns values to Omega
       									!creates the default Marginal P(wij=0) = 1
 
-      call read_exprdata('TestData2\data.txt') 	!read in experimental data
-      call read_pertdata('TestData2\pert.txt')	!read in perturbation data
-      call read_ProtName('TestData2\name.txt')    !read and display included protein names
-      call write_gamma('TestData2\gamma.txt')     !calculate and write alpha/beta ratios
-      call read_PK('TestData2\prior.txt') 		!create the Prior Knowledge Matrix
+      call read_exprdata(trim(adjustl(inputDir))//'\data.txt') 	!read in experimental data
+      call read_pertdata(trim(adjustl(inputDir))//'\pert.txt')	!read in perturbation data
+      call read_ProtName(trim(adjustl(inputDir))//'\name.txt')    !read and display included protein names
+      call write_gamma(trim(adjustl(inputDir))//'\gamma.txt')     !calculate and write alpha/beta ratios
+      call read_PK(trim(adjustl(inputDir))//'\prior.txt') 		!create the Prior Knowledge Matrix
 
       !optional arguments
       do arg_idx=1,iargc()

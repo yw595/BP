@@ -1,7 +1,7 @@
 function SMatrix=formSMatrix(metsNames,rxnNames)
     %parse equations written out in rxnEqs.txt
     SMatrix=zeros(length(metsNames),length(rxnNames));
-    rxnEqsFID=fopen('../Chubukov/rxnEqs.txt');
+    rxnEqsFID=fopen('../ChubukovData/rxnEqs.txt');
     line=fgetl(rxnEqsFID);
     while(line~=-1)
         rxnName=line(1:regexp(line,':')-1);
