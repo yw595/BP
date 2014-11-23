@@ -19,7 +19,7 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     writeMatrix(fluxData,['../' suffix '/fluxData.txt']);
 
     fluxPert = zeros(size(fluxData,1),size(fluxData,2));
-    fluxPert(1:8,:)=fluxData(1:8,:)./(1.1*max(fluxData(1:8,:),[],2)*ones(1,size(fluxData,2)));
+    fluxPert(1:8,:)=atanh(fluxData(1:8,:)./(1.1*max(fluxData(1:8,:),[],2)*ones(1,size(fluxData,2))));
     writeMatrix(fluxPert,['../' suffix '/fluxPert.txt']);
 
     fluxNameFID=fopen(['../' suffix '/fluxName.txt'],'w');
@@ -32,17 +32,19 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     rxnInfluenceMatrix=formRxnInfluenceMatrix(metsNames,fluxNames,SMatrix);
     
     corrMatrix=makeCorrMatrix(fluxData,fluxData);
-
+    sigCorrMatrix = corrMatrix;
+    sigCorrMatrix(abs(corrMatrix)<corrThresh)=0;
+    
     if(influenceSoftPrior)
-        writeMatrix(reshapeMatrix(rxnInfluenceMatrix),['../' suffix '/fluxSoftPrior.txt']);
+        writeMatrix(reshapeMatrix(rxnInfluenceMatrix),['../' suffix '/fluxSoftPrior.txt'],1);
     elseif(correlationSoftPrior)
-        writeMatrix(reshapeMatrix(sign(corrMatrix (abs(corrMatrix)>=corrThresh) )),['../' suffix '/fluxSoftPrior.txt']);
+        writeMatrix(reshapeMatrix(sign(sigCorrMatrix)),['../' suffix '/fluxSoftPrior.txt'],1);
     end
     
     if(influenceHardPrior)
         fluxHardPrior=abs(rxnInfluenceMatrix);
     elseif(correlationHardPrior)
-        fluxHardPrior=abs(corrMatrix)>=corrThresh;
+        fluxHardPrior=sigCorrMatrix;
     else
         fluxHardPrior=ones(length(fluxNames),length(fluxNames));
     end
@@ -52,7 +54,7 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     writeMatrix(metsData,['../' suffix '/metsData.txt']);
     
     if(stoichioSoftPrior)
-        writeMatrix(reshapeMatrix(sign(SMatrix)),['../' suffix '/metsSoftPrior.txt']);
+        writeMatrix(reshapeMatrix(sign(SMatrix)),['../' suffix '/metsSoftPrior.txt'],1);
     end
 
     metsHardPrior=ones(size(SMatrix,1),size(SMatrix,2));
@@ -84,7 +86,7 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     if(influenceSoftPrior)                              %Nprior
         fprintf(inputFID,'%d\n',sum(sum(rxnInfluenceMatrix~=0)));
     elseif(correlationSoftPrior)
-        fprintf(inputFID,'%d\n',sum(sum(abs(corrMatrix)>=corrThresh)));
+        fprintf(inputFID,'%d\n',sum(sum(sigCorrMatrix>0)));
     elseif(stoichioSoftPrior)
         fprintf(inputFID,'%d\n',sum(sum(SMatrix~=0)));
     else

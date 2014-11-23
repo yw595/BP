@@ -1,3 +1,4 @@
+clc;
 useMets=0;
 runNames={'ChubukovTest'};
 optionsArrays={[1 0 0 1 0 0 0 1 1 1 2 0 0 1 10]};
@@ -30,7 +31,6 @@ for i=1:length(runNames)
     renameInputFiles(suffix,useMets);
     eval('cd ..');
     system('make');
-    disp(['.' sprintf('\\doBP_FULL\n0\n%s\n', suffix)])
     system(['.' sprintf('\\doBP_FULL\n')]);
     eval('cd matlabFiles');
     break;

@@ -1,5 +1,11 @@
 function renameInputFiles(suffix,useMets)
 
+system(['rm ' '../' suffix '/name.txt']);
+system(['rm ' '../' suffix '/pert.txt']);
+system(['rm ' '../' suffix '/prior.txt']);
+system(['rm ' '../' suffix '/data.txt']);
+%system(['rm ' '../' suffix '/input.txt'])
+
 copyfile(['../' suffix '/fluxName.txt'],['../' suffix '/name.txt']);
 copyfile(['../' suffix '/fluxPert.txt'],['../' suffix '/pert.txt']);
 if(~exist('useMets','var') && useMets)

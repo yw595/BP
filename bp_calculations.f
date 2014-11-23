@@ -329,6 +329,9 @@ c>>>>>>> other
        double precision arctanh_xi_mu 		!arctanh(xi_mu) for message calculation
        double precision xkWik(Nwvals)		!x_k_mu * Omega
        double precision new_message(Nwvals) !rho_update
+       integer minIdx
+       double precision minValue
+       integer r
 
        !Execute the Proper Update Calculation
        if (option.EQ.0) then
@@ -341,7 +344,22 @@ c>>>>>>> other
           sol_term1 = sol_term1**2
 
           sol_term2 = 2d0*beta*Svar_ik+1d0
-          new_message = exp(-beta*(sol_term1/sol_term2))
+          new_message = -beta*(sol_term1/sol_term2)
+          minIdx=1
+          do r=1,Nwvals
+             if(new_message(r).LE.new_message(minIdx)) then
+                minIdx=r
+             endif
+          enddo
+          minValue=new_message(minIdx)
+          do r=1,Nwvals
+             new_message(r)=new_message(r)-minValue
+          enddo
+          do r=1,Nwvals-1
+             !write(*,'(F6.2$)') new_message(r)
+          enddo
+          !write(*,'(F6.2)') new_message(r)
+          new_message = exp(new_message)
 
           if (sum(new_message).eq.0) then
              write(*,*) new_message

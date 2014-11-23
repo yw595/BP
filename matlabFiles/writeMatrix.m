@@ -38,11 +38,12 @@ function writeMatrix(matrix,outputFile,writeInteger,writeSif,writeEdges,sigThres
                     else
                         fprintf(outputFID,'%d ',matrix(i,j));
                     end
-                end
-                if(j==size(matrix,2))
-                    fprintf(outputFID,'%2.2f\n',matrix(i,j));
                 else
-                    fprintf(outputFID,'%2.2f ',matrix(i,j));
+                    if(j==size(matrix,2))
+                        fprintf(outputFID,'%2.2f\n',matrix(i,j));
+                    else
+                        fprintf(outputFID,'%2.2f ',matrix(i,j));
+                    end
                 end
             end
         end
