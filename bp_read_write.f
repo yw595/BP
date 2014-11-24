@@ -27,6 +27,7 @@ c>>>>>>> other
       !to read in inputs from a file:  call read_input(21,filename)
 
       use mod_CONSTANTS
+      use mod_BP
 
       integer unit
       character(*) filename	!only for unit testing
@@ -37,6 +38,8 @@ c>>>>>>> other
       endif
 
       read(unit,"(I5)") doTestInd2Sub
+      read(unit,"(I5)") writeOutput
+      read(unit,"(I5)") dissipate
       read(unit,"(A50)") inputDir
       read(unit,*) SessionID		!String label for Results Folder
       read(unit,"(i5)") Nexpts 		!number of experiments

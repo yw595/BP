@@ -70,6 +70,8 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
     
     inputFID=fopen(['../' suffix '/input.txt'],'w');
     fprintf(inputFID,'%d\n',0);                         %doTestInd2Sub
+    fprintf(inputFID,'%d\n',1);                         %writeOutput
+    fprintf(inputFID,'%d\n',0);                         %dissipate
     fprintf(inputFID,'%s\n',suffix);                    %inputDir
     fprintf(inputFID,'%s\n',suffix);                    %Session ID
     if(duplicate)                                       %Nexpts

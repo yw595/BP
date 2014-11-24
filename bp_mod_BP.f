@@ -19,13 +19,13 @@ c    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        module mod_BP
        ! BELIEF PROPAGATION VARIABLES
-       ! 
+       !
        ! 'i' refers to the target node (the perceptron index)
        ! 'j' refers to non-cavity nodes
        ! 'k' refers to cavity nodes
-       
-          
-             
+
+
+
        !ALLOCATABLE VARIABLES===========================================
        !BP method variables; the Total Field Approach
        double precision, dimension(:,:), allocatable :: Marginals
@@ -40,23 +40,23 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        double precision, dimension(:), allocatable :: mean_Wij2
        double precision, dimension(:), allocatable :: rho_update
        double precision, dimension(:,:,:), allocatable :: DeltaRho
-       
+
        !Convenience variables for calculation
        double precision, dimension(:), allocatable :: sol_term1
        double precision, dimension(:,:), allocatable :: TFcorrection
        double precision, dimension(:,:), allocatable :: defaultPenalty
        double precision, dimension(:,:), allocatable :: positivePenalty
        double precision, dimension(:,:), allocatable :: negativePenalty
-       
+
        !<DEBUG> Variables ********
-       double precision, dimension(:,:), allocatable :: allRegrho 
+       double precision, dimension(:,:), allocatable :: allRegrho
        !================================================================
-       
+
        !NON-ALLOCATABLE VARIABLES======================================================================================
        !BP option variables
        integer opt_uni_ic		!message initialization [=0:random intial messages][=1:uniform intitial messages]
-       
-       
+
+
        !BP method variables
        integer target_node		! 'i' the target node (perceptron index)
        integer target_idx		! MAYBE DELETE: index of the target node in the array of observed nodes
@@ -70,12 +70,12 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        logical Converged
        double precision xi_mu	! the experimental expression of the target node in experiment mu
        double precision ui_mu	! the perturbation of the target node in experiment mu
-       
-       double precision S_ik	! Mean of the aggregate influence of the all-but-k nodes 
+
+       double precision S_ik	! Mean of the aggregate influence of the all-but-k nodes
        double precision Svar_ik ! Varaince of the aggregate influence of the all-but-k nodes
        double precision Sdev_ik ! Standard deviation of the aggregate influence of the all-but-k nodes
        double precision MaxDeltaRho 	! Max of all the changes in messages for convergence
-       
+
        !Convenience variables for indexing and calculations
        integer fxd_idx
        integer omega_idx
@@ -87,7 +87,8 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        double precision :: minusTerm		!the contribution to S that is replaced
        double precision :: plusTerm			!the replacement term
        !==============================================================================================================
-       
-       
-       
+
+       integer writeOutput
+       integer dissipate
+
        end module mod_BP
