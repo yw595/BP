@@ -1,5 +1,5 @@
 GFORTRAN module version '10' created from bp_mod_CONSTANTS.f
-MD5:c9b720397d2cedebdfb57288ba0b5578 -- If you edit this, you'll get what you deserve.
+MD5:f82532564b4ef8c19cacc1f493fddd2b -- If you edit this, you'll get what you deserve.
 
 (() () () () () () () () () () () () () () () () () () () () () () () ()
 () () ())
@@ -90,68 +90,74 @@ UNKNOWN UNKNOWN 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0
 26 'nprior' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN UNKNOWN 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0
 0)
-27 'numrandnumbers' 'mod_constants' '' 1 ((PARAMETER UNKNOWN-INTENT
-UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0
-() (CONSTANT (INTEGER 4 0 0 0 INTEGER ()) 0 '5000000') () 0 () () () 0 0)
-28 'nwvals' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
-UNKNOWN UNKNOWN 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0
-0)
-29 'obsarray' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
-UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (INTEGER 4
-0 0 0 INTEGER ()) 0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
-30 'omega' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
-UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (REAL 8 0 0 0 REAL ())
-0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
-31 'opt_maxskip' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+27 'numoutputidxs' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () ()
 0 () () () 0 0)
-32 'pk' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+28 'numrandnumbers' 'mod_constants' '' 1 ((PARAMETER UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0
+() (CONSTANT (INTEGER 4 0 0 0 INTEGER ()) 0 '5000000') () 0 () () () 0 0)
+29 'nwvals' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+UNKNOWN UNKNOWN 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () () 0 () () () 0
+0)
+30 'obsarray' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (INTEGER 4
+0 0 0 INTEGER ()) 0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
+31 'omega' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (REAL 8 0 0 0 REAL ())
+0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
+32 'opt_maxskip' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () ()
+0 () () () 0 0)
+33 'outputidxs' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (INTEGER 4
+0 0 0 INTEGER ()) 0 0 () (2 0 DEFERRED () () () ()) 0 () () () 0 0)
+34 'pk' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (INTEGER 4 0 0 0
 INTEGER ()) 0 0 () (2 0 DEFERRED () () () ()) 0 () () () 0 0)
-33 'prntfactors' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+35 'prntfactors' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (LOGICAL 4 0 0 0 LOGICAL ()) 0 0 () ()
 0 () () () 0 0)
-34 'protname' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+36 'protname' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (
 CHARACTER 1 0 0 0 CHARACTER ((CONSTANT (INTEGER 4 0 0 0 INTEGER ()) 0 '25')))
 0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
-35 'protobs' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+37 'protobs' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (INTEGER 4 0 0 0
 INTEGER ()) 0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
-36 'randomic' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+38 'randomic' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (LOGICAL 4 0 0 0 LOGICAL ()) 0 0 () ()
 0 () () () 0 0)
-37 'sessiondirectory' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+39 'sessiondirectory' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (CHARACTER 1 0 0 0 CHARACTER ((
 CONSTANT (INTEGER 4 0 0 0 INTEGER ()) 0 '33'))) 0 0 () () 0 () () () 0 0)
-38 'sessionid' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+40 'sessionid' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN UNKNOWN 0 0) (CHARACTER 1 0 0 0 CHARACTER ((
 CONSTANT (INTEGER 4 0 0 0 INTEGER ()) 0 '25'))) 0 0 () () 0 () () () 0 0)
-39 'testinds' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+41 'testinds' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (INTEGER 4
 0 0 0 INTEGER ()) 0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
-40 'testsubs' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
+42 'testsubs' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (INTEGER 4
 0 0 0 INTEGER ()) 0 0 () (2 0 DEFERRED () () () ()) 0 () () () 0 0)
-41 'thresh' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+43 'thresh' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN UNKNOWN 0 0) (REAL 8 0 0 0 REAL ()) 0 0 () () 0 () () () 0 0)
-42 'today' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+44 'today' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN UNKNOWN 0 0 DIMENSION) (INTEGER 4 0 0 0 INTEGER ()) 0 0 () (1 0
 EXPLICIT (CONSTANT (INTEGER 4 0 0 0 INTEGER ()) 0 '1') (CONSTANT (
 INTEGER 4 0 0 0 INTEGER ()) 0 '3')) 0 () () () 0 0)
-43 'udata' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+45 'udata' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (REAL 8 0 0 0 REAL ())
 0 0 () (2 0 DEFERRED () () () ()) 0 () () () 0 0)
-44 'w_avg' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+46 'w_avg' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (REAL 8 0 0 0 REAL ())
 0 0 () (2 0 DEFERRED () () () ()) 0 () () () 0 0)
-45 'wi_avg' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+47 'wi_avg' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (REAL 8 0 0 0 REAL ())
 0 0 () (1 0 DEFERRED () ()) 0 () () () 0 0)
-46 'xdata' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+48 'xdata' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN IMPLICIT-SAVE 0 0 ALLOCATABLE DIMENSION) (REAL 8 0 0 0 REAL ())
 0 0 () (2 0 DEFERRED () () () ()) 0 () () () 0 0)
-47 'year' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
+49 'year' 'mod_constants' '' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN UNKNOWN 0 0) (CHARACTER 1 0 0 0 CHARACTER ((CONSTANT (INTEGER 4
 0 0 0 INTEGER ()) 0 '4'))) 0 0 () () 0 () () () 0 0)
 )
@@ -161,8 +167,9 @@ UNKNOWN UNKNOWN 0 0) (CHARACTER 1 0 0 0 CHARACTER ((CONSTANT (INTEGER 4
 11 'fullnetmarg' 0 12 'gamma' 0 13 'inputdir' 0 14 'lambda' 0 15
 'makedirectory_1' 0 16 'maxwvals' 0 17 'mod_constants' 0 18 'modeldir' 0
 19 'modelfileloc' 0 20 'month' 0 21 'ndeci' 0 22 'nexpts' 0 23 'nnodes'
-0 24 'nobs' 0 25 'nprior' 0 26 'numrandnumbers' 0 27 'nwvals' 0 28
-'obsarray' 0 29 'omega' 0 30 'opt_maxskip' 0 31 'pk' 0 32 'prntfactors'
-0 33 'protname' 0 34 'protobs' 0 35 'randomic' 0 36 'sessiondirectory' 0
-37 'sessionid' 0 38 'testinds' 0 39 'testsubs' 0 40 'thresh' 0 41 'today'
-0 42 'udata' 0 43 'w_avg' 0 44 'wi_avg' 0 45 'xdata' 0 46 'year' 0 47)
+0 24 'nobs' 0 25 'nprior' 0 26 'numoutputidxs' 0 27 'numrandnumbers' 0
+28 'nwvals' 0 29 'obsarray' 0 30 'omega' 0 31 'opt_maxskip' 0 32
+'outputidxs' 0 33 'pk' 0 34 'prntfactors' 0 35 'protname' 0 36 'protobs'
+0 37 'randomic' 0 38 'sessiondirectory' 0 39 'sessionid' 0 40 'testinds'
+0 41 'testsubs' 0 42 'thresh' 0 43 'today' 0 44 'udata' 0 45 'w_avg' 0
+46 'wi_avg' 0 47 'xdata' 0 48 'year' 0 49)

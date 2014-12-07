@@ -77,5 +77,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        integer, dimension(:,:), allocatable :: testSubs
        integer doTestInd2Sub
        character(len=50) inputDir
+       integer, dimension(:,:), allocatable :: outputIdxs
+       integer numOutputIdxs
 
        end module mod_CONSTANTS

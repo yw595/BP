@@ -49,6 +49,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       call read_ProtName(trim(adjustl(inputDir))//'\name.txt')    !read and display included protein names
       call write_gamma(trim(adjustl(inputDir))//'\gamma.txt')     !calculate and write alpha/beta ratios
       call read_PK(trim(adjustl(inputDir))//'\prior.txt') 		!create the Prior Knowledge Matrix
+      call read_OutputIdxs(trim(adjustl(inputDir))//'\outputIdxs.txt')
 
       !optional arguments
       do arg_idx=1,iargc()

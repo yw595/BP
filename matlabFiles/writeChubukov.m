@@ -68,7 +68,12 @@ function writeChubukov(suffix,idxsToSkip1, idxsToSkip2,localMin,globalMin,...
         fprintf(metsNameFID,'%s\n',metsNames{i});
     end
     
+    outputIdxsFID=fopen(['../' suffix '/outputIdxs.txt'],'w');
+    fprintf(outputIdxsFID,'1 1 1\n');
+    fclose(outputIdxsFID);
+    
     inputFID=fopen(['../' suffix '/input.txt'],'w');
+    fprintf(inputFID,'%d\n',1);                         %numOutputIdxs
     fprintf(inputFID,'%d\n',0);                         %doTestInd2Sub
     fprintf(inputFID,'%d\n',1);                         %writeOutput
     fprintf(inputFID,'%d\n',0);                         %dissipate

@@ -25,7 +25,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        integer SelfFB(1)
        double precision SelfFB_val(1)
 
-
+       nextOutputIdx = 1
        !!!Calculate Marginals for all observed Targets
        do target_node=1,Nnodes
           if (ProtObs(target_node).EQ.1) then !only continue if the node is observed
@@ -137,6 +137,14 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
             call randperm(Nnodes,reg_permu) !permute regulators (variable nodes)
             do varnode_idx =1,Nnodes
                reg = reg_permu(varnode_idx)	!reg = 'k' index
+
+               if(target_node.EQ.outputIdxs(nextOutputIdx,1) .AND.
+     :         factor_idx.EQ.outputIdxs(nextOutputIdx,2) .AND.
+     :         varnode_idx.EQ.outputIdxs(nextOutputIdx,3)) then
+                 if(nextOutputIdx .LT. numOutputIdxs) then
+                   nextOutputIdx = nextOutputIdx + 1
+                 endif
+               endif
 
                if (minval(abs(FxdRegs-reg)).ne.0) then !skips all fixed edges
                   !Subtract reg's contribution to S

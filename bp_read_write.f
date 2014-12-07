@@ -37,6 +37,7 @@ c>>>>>>> other
          open(unit,file=trim(adjustl(filename)),status='OLD')
       endif
 
+      read(unit,"(I5)") numOutputIdxs
       read(unit,"(I5)") doTestInd2Sub
       read(unit,"(I5)") writeOutput
       read(unit,"(I5)") dissipate
@@ -430,3 +431,16 @@ c>>>>>>> other
        enddo
 
        end subroutine read_realmatrix_fromfile
+
+       subroutine read_OutputIdxs(filename)
+       use mod_CONSTANTS
+       character(*) filename
+       integer lineNum,outputIdx
+
+       open(21,file=trim(adjustl(filename)),status='OLD')
+       do lineNum=1,numOutputIdxs
+          read(21,*) (outputIdxs(lineNum,outputIdx),expr_idx=1,3)
+       enddo
+       close(21)
+
+       end subroutine read_OutputIdxs

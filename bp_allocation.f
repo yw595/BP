@@ -41,7 +41,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
        allocate(testInds(35))
        allocate(testSubs(35,2))
-
+       allocate(outputIdxs(numOutputIdxs,3))
 
        !assign values to Omega
        do widx =1,Nwvals
@@ -91,13 +91,14 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
        deallocate(W_avg)
        deallocate(Wi_avg)
        deallocate(aModelW)
-       if(doTestInd2Sub) then
+       if(doTestInd2Sub .EQ. 1) then
        else
           deallocate(PK)
        endif
 
        deallocate(testInds)
        deallocate(testSubs)
+       deallocate(outputIdxs)
 
        end subroutine deallocate_CONSTANTS
        !^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
